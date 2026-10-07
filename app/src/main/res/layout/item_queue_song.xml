@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="1dp"
+    android:paddingVertical="6dp"
+    android:paddingStart="8dp"
+    android:paddingEnd="4dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackgroundBorderless"
+    android:elevation="0dp">
+
+    <ImageView
+        android:id="@+id/queue_drag_handle"
+        android:layout_width="40dp"
+        android:layout_height="48dp"
+        android:gravity="center"
+        android:padding="11dp"
+        android:src="@drawable/ic_drag_handle"
+        android:contentDescription="Reorder song"
+        android:clickable="true"
+        android:focusable="true"
+        app:tint="@color/text_on_photo_secondary" />
+
+    <ImageView
+        android:id="@+id/queue_album_art"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="2dp"
+        android:scaleType="centerCrop"
+        android:background="@drawable/bg_queue_art"
+        android:clipToOutline="true"
+        android:src="@mipmap/ic_launcher"
+        android:contentDescription="Album artwork" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="4dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/queue_song_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_on_photo_primary"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end" />
+
+        <TextView
+            android:id="@+id/queue_song_artist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/text_on_photo_secondary"
+            android:textSize="12sp"
+            android:maxLines="1"
+            android:ellipsize="end" />
+
+        <TextView
+            android:id="@+id/queue_now_playing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="NOW PLAYING"
+            android:textColor="@color/accent_cyan"
+            android:textSize="9sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.08"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/btn_info"
+        android:layout_width="44dp"
+        android:layout_height="48dp"
+        android:background="@android:color/transparent"
+        android:src="@android:drawable/ic_menu_info_details"
+        android:contentDescription="Track info"
+        app:tint="@color/text_on_photo_secondary" />
+
+</LinearLayout>

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- Full-screen library surface. Playback lives in the persistent bottom mini-player. -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="4dp"
+        android:paddingBottom="6dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginHorizontal="12dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/search_input"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_glass_panel"
+                android:paddingHorizontal="14dp"
+                android:hint="Search your music"
+                android:textColorHint="@color/text_on_photo_secondary"
+                android:textColor="@color/text_on_photo_primary"
+                android:inputType="text"
+                android:maxLines="1"
+                android:imeOptions="actionSearch"
+                android:importantForAutofill="no" />
+
+            <ImageButton
+                android:id="@+id/btn_sort"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/bg_glass_panel"
+                android:src="@android:drawable/ic_menu_sort_alphabetically"
+                android:contentDescription="Sort music"
+                app:tint="@color/accent_cyan" />
+
+            <ImageButton
+                android:id="@+id/btn_view_mode"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/bg_glass_panel"
+                android:src="@android:drawable/ic_menu_view"
+                android:contentDescription="Choose music view"
+                app:tint="@color/accent_cyan" />
+
+            <ImageButton
+                android:id="@+id/btn_add_to_playlist"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/bg_glass_panel"
+                android:src="@android:drawable/ic_input_add"
+                android:visibility="gone"
+                android:contentDescription="Add selected songs to playlist"
+                app:tint="@color/accent_cyan" />
+
+            <ImageButton
+                android:id="@+id/btn_favorites_filter"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/bg_glass_panel"
+                android:src="@android:drawable/btn_star_big_off"
+                android:contentDescription="Show favorites"
+                app:tint="@color/accent_cyan" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="14dp">
+
+            <TextView
+                android:id="@+id/selection_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:textColor="@color/accent_cyan"
+                android:textStyle="bold"
+                android:textSize="11sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/list_section_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="YOUR MUSIC"
+                android:textColor="@color/text_secondary"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.14"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/view_mode_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SONGS"
+                android:textColor="@color/accent_cyan"
+                android:textSize="8sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.08"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/trim_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:visibility="gone" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/song_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingTop="2dp"
+                android:paddingBottom="8dp"
+                android:layoutAnimation="@anim/layout_reveal" />
+
+            <TextView
+                android:id="@+id/empty_state"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="40dp"
+                android:textColor="@color/text_secondary"
+                android:visibility="gone"
+                android:text="No music found on this device.&#10;Add some songs, then pull down to rescan." />
+        </FrameLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</LinearLayout>

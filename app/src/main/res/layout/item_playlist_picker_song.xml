@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="68dp" android:paddingHorizontal="8dp" android:paddingVertical="6dp"
+    android:gravity="center_vertical" android:orientation="horizontal" android:foreground="?attr/selectableItemBackground">
+    <ImageView android:id="@+id/picker_artwork" android:layout_width="52dp" android:layout_height="52dp" android:scaleType="centerCrop" android:background="@drawable/bg_card" />
+    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="10dp" android:orientation="vertical">
+        <TextView android:id="@+id/picker_title" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="@color/text_on_photo_primary" android:textSize="14sp" android:textStyle="bold" android:maxLines="1" android:ellipsize="end" />
+        <TextView android:id="@+id/picker_meta" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:textColor="@color/text_on_photo_secondary" android:textSize="11sp" android:maxLines="1" android:ellipsize="end" />
+        <TextView android:id="@+id/picker_existing" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="ALREADY IN PLAYLIST" android:textColor="@color/accent_cyan" android:textSize="9sp" android:textStyle="bold" android:visibility="gone" />
+    </LinearLayout>
+    <CheckBox android:id="@+id/picker_check" android:layout_width="48dp" android:layout_height="48dp" android:clickable="false" android:focusable="false" />
+</LinearLayout>

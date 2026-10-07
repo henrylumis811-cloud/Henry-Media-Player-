@@ -1,0 +1,6 @@
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <objectAnimator android:propertyName="translationX" android:valueType="floatType" android:valueFrom="-12" android:valueTo="0" android:duration="250" />
+    <objectAnimator android:propertyName="scaleX" android:valueType="floatType" android:valueFrom="0.985" android:valueTo="1" android:duration="250" />
+    <objectAnimator android:propertyName="scaleY" android:valueType="floatType" android:valueFrom="0.985" android:valueTo="1" android:duration="250" />
+    <objectAnimator android:propertyName="alpha" android:valueType="floatType" android:valueFrom="0.98" android:valueTo="1" android:duration="250" />
+</set>

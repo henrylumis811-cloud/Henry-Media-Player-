@@ -1,0 +1,92 @@
+name: RVH Music — Build & Downloadable Release
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rvh-music-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build and package APK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+
+      - name: Set up Gradle 8.7
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
+
+      - name: Build debug APK
+        run: gradle --no-daemon --stacktrace assembleDebug
+
+      - name: Package APK and checksum
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          SOURCE_APK="app/build/outputs/apk/debug/app-debug.apk"
+          test -f "$SOURCE_APK"
+          cp "$SOURCE_APK" "dist/RVH-Music-latest.apk"
+          sha256sum "dist/RVH-Music-latest.apk" | tee "dist/RVH-Music-latest.apk.sha256"
+
+      - name: Upload downloadable Actions artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: RVH-Music-debug-apk
+          path: |
+            dist/RVH-Music-latest.apk
+            dist/RVH-Music-latest.apk.sha256
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Publish or update rolling GitHub Release
+        if: ${{ github.ref == 'refs/heads/main' && success() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          APK: dist/RVH-Music-latest.apk
+          SHA_FILE: dist/RVH-Music-latest.apk.sha256
+          COMMIT_SHA: ${{ github.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          TAG="rvh-latest"
+          NOTES="$(printf 'Latest successfully built RVH Music debug APK.\n\nCommit: %s\n\nDirect APK download: https://github.com/%s/releases/download/%s/RVH-Music-latest.apk\n\nThis is a debug build for testing, not a production-signed release.' "$COMMIT_SHA" "$REPO" "$TAG")"
+
+          if gh release view "$TAG" --repo "$REPO" >/dev/null 2>&1; then
+            # Keep the rolling tag attached to the commit that produced this APK.
+            git tag -f "$TAG" "$COMMIT_SHA"
+            git push origin "refs/tags/$TAG" --force
+            gh release upload "$TAG" "$APK" "$SHA_FILE" --clobber --repo "$REPO"
+            gh release edit "$TAG" \
+              --title "RVH Music — Latest" \
+              --notes "$NOTES" \
+              --repo "$REPO"
+          else
+            gh release create "$TAG" "$APK" "$SHA_FILE" \
+              --title "RVH Music — Latest" \
+              --notes "$NOTES" \
+              --repo "$REPO" \
+              --target "$COMMIT_SHA"
+          fi
+
+          echo "Published APK: https://github.com/$REPO/releases/download/$TAG/RVH-Music-latest.apk"

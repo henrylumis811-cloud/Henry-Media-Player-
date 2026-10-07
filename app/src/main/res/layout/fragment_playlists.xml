@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical">
+    <FrameLayout android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginHorizontal="8dp">
+        <EditText android:id="@+id/playlist_search" android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginEnd="52dp"
+            android:hint="Search playlists" android:singleLine="true" android:inputType="text" android:imeOptions="actionDone"
+            android:background="@drawable/bg_card" android:paddingHorizontal="14dp" android:textColor="@color/text_on_photo_primary"
+            android:textColorHint="@color/text_on_photo_secondary" android:textSize="13sp" android:visibility="gone" />
+        <ImageButton android:id="@+id/btn_create" android:layout_width="48dp" android:layout_height="48dp" android:layout_gravity="end"
+            android:background="@android:color/transparent" android:src="@android:drawable/ic_input_add" app:tint="@color/text_on_photo_secondary"
+            android:contentDescription="Create playlist" />
+    </FrameLayout>
+
+    <LinearLayout android:id="@+id/playlist_detail_header" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp" android:layout_marginTop="4dp" android:gravity="center_vertical" android:orientation="horizontal" android:visibility="gone">
+        <ImageView android:id="@+id/playlist_artwork" android:layout_width="88dp" android:layout_height="88dp" android:scaleType="centerCrop"
+            android:background="@drawable/bg_card" android:contentDescription="Playlist artwork" />
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="14dp" android:orientation="vertical">
+            <TextView android:id="@+id/playlist_detail_name" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="@color/text_on_photo_primary"
+                android:textSize="21sp" android:textStyle="bold" android:maxLines="2" android:ellipsize="end" />
+            <TextView android:id="@+id/playlist_detail_stats" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="5dp"
+                android:textColor="@color/text_on_photo_secondary" android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout android:id="@+id/playlist_controls" android:layout_width="match_parent" android:layout_height="52dp" android:layout_marginHorizontal="12dp" android:layout_marginTop="8dp"
+        android:paddingHorizontal="6dp" android:gravity="center_vertical" android:visibility="gone">
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_playlist_play" android:layout_width="0dp" android:layout_height="48dp" android:minHeight="48dp" android:layout_weight="1"
+            android:text="PLAY ALL" android:textStyle="bold" app:cornerRadius="16dp" />
+        <ImageButton android:id="@+id/btn_playlist_add" android:layout_width="48dp" android:layout_height="48dp" android:layout_marginStart="4dp" android:background="@drawable/bg_card"
+            android:src="@android:drawable/ic_input_add" app:tint="@color/accent_cyan" android:contentDescription="Add songs to playlist" />
+        <ImageButton android:id="@+id/btn_playlist_shuffle" android:layout_width="48dp" android:layout_height="48dp" android:layout_marginStart="4dp" android:background="@drawable/bg_card"
+            android:src="@drawable/ic_shuffle_playlist" app:tint="@color/accent_cyan" android:contentDescription="Shuffle playlist" />
+        <ImageButton android:id="@+id/btn_playlist_menu" android:layout_width="48dp" android:layout_height="48dp" android:layout_marginStart="4dp" android:background="@drawable/bg_card"
+            android:src="@android:drawable/ic_menu_more" app:tint="@color/accent_cyan" android:contentDescription="Playlist options" />
+    </LinearLayout>
+
+    <TextView android:id="@+id/unavailable_hint" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="20dp" android:layout_marginTop="2dp"
+        android:textColor="@color/text_on_photo_secondary" android:textSize="12sp" android:visibility="gone" />
+    <androidx.recyclerview.widget.RecyclerView android:id="@+id/list" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:clipToPadding="false" android:paddingVertical="8dp" />
+    <TextView android:id="@+id/empty_state" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:gravity="center" android:padding="32dp"
+        android:text="No playlists yet.
+Create one to organize your music." android:textColor="@color/text_on_photo_secondary" android:textSize="15sp" />
+</LinearLayout>

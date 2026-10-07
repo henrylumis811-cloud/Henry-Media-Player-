@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:padding="16dp">
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="ADD SONGS" android:textColor="@color/text_on_photo_primary" android:textSize="20sp" android:textStyle="bold" />
+    <TextView android:id="@+id/playlist_add_subtitle" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="3dp" android:text="Choose songs from your library" android:textColor="@color/text_on_photo_secondary" android:textSize="12sp" />
+    <EditText android:id="@+id/playlist_add_search" android:layout_width="match_parent" android:layout_height="48dp"
+        android:layout_marginTop="12dp" android:hint="Search songs, artists or albums" android:singleLine="true"
+        android:imeOptions="actionDone" android:inputType="text" />
+    <TextView android:id="@+id/playlist_add_count" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="8dp" android:text="0 selected" android:textColor="@color/text_on_photo_secondary" android:textSize="12sp" />
+    <androidx.recyclerview.widget.RecyclerView android:id="@+id/playlist_add_list" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"
+        android:layout_marginTop="4dp" android:clipToPadding="false" android:paddingVertical="4dp" />
+    <LinearLayout android:layout_width="match_parent" android:layout_height="56dp" android:gravity="center_vertical" android:orientation="horizontal">
+        <Button android:id="@+id/playlist_add_cancel" android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1" android:text="CANCEL" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/playlist_add_confirm" android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1" android:layout_marginStart="8dp" android:text="ADD" android:enabled="false" />
+    </LinearLayout>
+</LinearLayout>

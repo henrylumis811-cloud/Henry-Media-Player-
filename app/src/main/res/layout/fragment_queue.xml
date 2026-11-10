@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:gravity="center_vertical"
+        android:paddingTop="2dp"
+        android:paddingBottom="6dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/queue_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textColor="@color/text_on_photo_secondary"
+                android:textSize="12sp"
+                android:letterSpacing="0.02" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/btn_clear_queue"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:gravity="center"
+            android:minWidth="64dp"
+            android:paddingHorizontal="12dp"
+            android:text="Clear"
+            android:textColor="@color/accent_cyan"
+            android:textSize="14sp"
+            android:clickable="true"
+            android:focusable="true"
+            android:contentDescription="Clear upcoming queue"
+            android:foreground="?attr/selectableItemBackgroundBorderless" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/queue_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="20dp" />
+
+        <LinearLayout
+            android:id="@+id/queue_empty_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Your queue is empty"
+                android:textColor="@color/text_on_photo_primary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:gravity="center"
+                android:text="Choose music from your library to start listening."
+                android:textColor="@color/text_on_photo_secondary"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/btn_add_songs"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginTop="12dp"
+                android:gravity="center"
+                android:minWidth="120dp"
+                android:paddingHorizontal="18dp"
+                android:text="Browse library"
+                android:textColor="@color/accent_cyan"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:clickable="true"
+                android:focusable="true"
+                android:contentDescription="Browse library to choose music"
+                android:foreground="?attr/selectableItemBackgroundBorderless" />
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>

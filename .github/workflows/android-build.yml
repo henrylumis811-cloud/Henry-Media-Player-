@@ -1,0 +1,123 @@
+name: RVH Music — Build Signed Release APK
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rvh-music-release-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-release:
+    name: Build and publish signed Release APK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+
+      - name: Set up Gradle 8.7
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
+
+      - name: Validate release signing secrets
+        env:
+          RVH_UPLOAD_KEY_BASE64: ${{ secrets.RVH_UPLOAD_KEY_BASE64 }}
+          RVH_STORE_PASSWORD: ${{ secrets.RVH_STORE_PASSWORD }}
+          RVH_KEY_ALIAS: ${{ secrets.RVH_KEY_ALIAS }}
+          RVH_KEY_PASSWORD: ${{ secrets.RVH_KEY_PASSWORD }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$RVH_UPLOAD_KEY_BASE64" || { echo "Missing GitHub Actions secret: RVH_UPLOAD_KEY_BASE64"; exit 1; }
+          test -n "$RVH_STORE_PASSWORD" || { echo "Missing GitHub Actions secret: RVH_STORE_PASSWORD"; exit 1; }
+          test -n "$RVH_KEY_ALIAS" || { echo "Missing GitHub Actions secret: RVH_KEY_ALIAS"; exit 1; }
+          test -n "$RVH_KEY_PASSWORD" || { echo "Missing GitHub Actions secret: RVH_KEY_PASSWORD"; exit 1; }
+
+      - name: Restore private release keystore
+        env:
+          RVH_UPLOAD_KEY_BASE64: ${{ secrets.RVH_UPLOAD_KEY_BASE64 }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf '%s' "$RVH_UPLOAD_KEY_BASE64" | base64 --decode > app/rvh-music-release.jks
+          chmod 600 app/rvh-music-release.jks
+          test -s app/rvh-music-release.jks
+
+      - name: Build signed Release APK
+        env:
+          RVH_STORE_PASSWORD: ${{ secrets.RVH_STORE_PASSWORD }}
+          RVH_KEY_ALIAS: ${{ secrets.RVH_KEY_ALIAS }}
+          RVH_KEY_PASSWORD: ${{ secrets.RVH_KEY_PASSWORD }}
+        run: gradle --no-daemon --stacktrace clean assembleRelease
+
+      - name: Verify signature, package APK and checksum
+        shell: bash
+        run: |
+          set -euo pipefail
+          APK="app/build/outputs/apk/release/app-release.apk"
+          test -s "$APK"
+          BUILD_TOOLS="$(find "$ANDROID_HOME/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -n 1)"
+          test -x "$BUILD_TOOLS/apksigner"
+          "$BUILD_TOOLS/apksigner" verify --verbose --print-certs "$APK"
+          mkdir -p dist
+          cp "$APK" "dist/RVH-Music-release.apk"
+          sha256sum "dist/RVH-Music-release.apk" | tee "dist/RVH-Music-release.apk.sha256"
+          rm -f app/rvh-music-release.jks
+
+      - name: Upload signed Release APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: RVH-Music-release-apk
+          path: |
+            dist/RVH-Music-release.apk
+            dist/RVH-Music-release.apk.sha256
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Publish or update GitHub Release
+        if: ${{ github.ref == 'refs/heads/main' && success() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          APK: dist/RVH-Music-release.apk
+          SHA_FILE: dist/RVH-Music-release.apk.sha256
+          COMMIT_SHA: ${{ github.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          TAG="rvh-latest"
+          VERSION_NAME="$(sed -nE 's/^[[:space:]]*versionName "([^"]+)".*/\1/p' app/build.gradle | head -n 1)"
+          VERSION_CODE="$(sed -nE 's/^[[:space:]]*versionCode ([0-9]+).*/\1/p' app/build.gradle | head -n 1)"
+          test -n "$VERSION_NAME"
+          test -n "$VERSION_CODE"
+          NOTES="$(printf 'Latest signed RVH Music Release APK.\n\nVersion: %s (versionCode %s)\nCommit: %s\n\nThis APK is signed with the dedicated RVH Music release key.' "$VERSION_NAME" "$VERSION_CODE" "$COMMIT_SHA")"
+
+          if gh release view "$TAG" --repo "$REPO" >/dev/null 2>&1; then
+            git tag -f "$TAG" "$COMMIT_SHA"
+            git push origin "refs/tags/$TAG" --force
+            gh release upload "$TAG" "$APK" "$SHA_FILE" --clobber --repo "$REPO"
+            gh release edit "$TAG" --title "RVH Music — Latest Release" --notes "$NOTES" --repo "$REPO"
+          else
+            gh release create "$TAG" "$APK" "$SHA_FILE" \
+              --title "RVH Music — Latest Release" \
+              --notes "$NOTES" \
+              --repo "$REPO" \
+              --target "$COMMIT_SHA"
+          fi
+
+          echo "Published signed APK: https://github.com/$REPO/releases/download/$TAG/RVH-Music-release.apk"

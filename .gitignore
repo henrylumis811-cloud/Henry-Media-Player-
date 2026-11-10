@@ -1,0 +1,24 @@
+*.iml
+.gradle/
+/local.properties
+/.idea/
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+app/build/
+
+# Local signing material must never enter the repository.
+/debug.keystore
+
+# RVH Music private release-signing material (never commit)
+/app/rvh-music-release.jks
+/key.properties
+*.jks
+*.keystore
+*.p12
+*.pfx
+RVH_UPLOAD_KEY_BASE64.txt
+GITHUB_SECRETS.txt
